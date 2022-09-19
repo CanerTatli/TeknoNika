@@ -1,3 +1,3 @@
 # TeknoNika
 
-
+Repolar yazılacak
