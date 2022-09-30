@@ -36,8 +36,7 @@ namespace NIKA.APII.Controllers
                 ProductID = p.Id
             }).ToList();
 
-            //istersen bir tane de downloadreport endpoint yaparsın, onunla da excel, csv vs oluşturup indirtirsin. onlar da basit biraz boilerplate kodu var sadece
-
+            //some additionas about reports
             return Ok(products);
         }
 
