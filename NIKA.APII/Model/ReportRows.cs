@@ -54,4 +54,35 @@
         public bool IsCritic { get => UnitsInStock <= 5; }
         // bu şekilde set değil sadece get bir değer ve sadece okuma yaparken ufak bir if dönüyor içinde
     }
+
+    public record EmployeeSalesReportRow
+    {
+        public int EmployeeId { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public int SaleCount { get; set; }
+        public int TotalSales { get; set; }
+        public decimal TotalRevenue { get; set; }
+        public bool IsQuotaSuccessful
+        {
+            get
+            {
+                return TotalRevenue > 10;
+            }
+        }
+        public decimal Bonus
+        {
+            get
+            {
+                if (IsQuotaSuccessful)
+                {
+                    return (TotalRevenue - 10) * 10 / 100;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+    }
 }
