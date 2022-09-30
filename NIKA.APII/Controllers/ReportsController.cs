@@ -11,8 +11,8 @@ using System.Linq;
 
 namespace NIKA.APII.Controllers
 {
-     [ApiController]
-     [Route("Api/[controller]")]
+    [ApiController]
+    [Route("reports")]
     public class ReportsConroller : Controller
     {
         private readonly TeknoNIKAContext dbContext;
@@ -26,13 +26,14 @@ namespace NIKA.APII.Controllers
         }
 
 
-        [HttpGet("get-stockreport")]
-       public IActionResult GetStockReport()
+        [HttpGet("get-stocks")]
+        public IActionResult GetStockReport()
         {
-           
-            var products = dbContext.Products.Select(p => new StockReportRow() { 
-                UnitsInStock = p.UnitsInStock, 
-                ProductName = p.ProductName,  
+
+            var products = dbContext.Products.Select(p => new StockReportRow()
+            {
+                UnitsInStock = p.UnitsInStock,
+                ProductName = p.ProductName,
                 ProductID = p.Id
             }).ToList();
 
@@ -40,23 +41,23 @@ namespace NIKA.APII.Controllers
             return Ok(products);
         }
 
-        [HttpGet("get-expensereport")]   
+        [HttpGet("get-expenses")]
         public IActionResult GetExpenseReport()
         {
             var expenses = dbContext.Expenses.Select(p => new ExpensesReportRow()
             {
-                WaterBills= p.WaterBills,
-                ElectricBills= p.ElectricBills,
+                WaterBills = p.WaterBills,
+                ElectricBills = p.ElectricBills,
                 TechnicalInfrastructure = p.TechnicalInfrastructure,
-                EmployeeSalary= p.EmployeeSalary,
-                ExpenseDate=p.ExpenseDate  
+                EmployeeSalary = p.EmployeeSalary,
+                ExpenseDate = p.ExpenseDate
             }).ToList();
 
             return Ok(expenses);
         }
 
 
-        [HttpGet("get-bestseller-report")]
+        [HttpGet("get-bestsellers")]
         public async Task<IActionResult> GetBestSeller()
         {
             var query = @"
@@ -74,7 +75,7 @@ order by SellingQuantity desc
         }
 
 
-        [HttpGet("get-supplier-report")]
+        [HttpGet("get-suppliers")]
         public async Task<IActionResult> GetSupplierReport()
         {
             var query = @"
@@ -114,26 +115,49 @@ group by CompanyName
             });
         }
 
-        public record BestSellerReportRow
+
+        [HttpGet("get-products")]
+        public async Task<IActionResult> GetProducts()
         {
-            public string ProductName { get; set; } = string.Empty;
-            public int SellingQuantity { get; set; }
+            var query = @"
+select 
+	CategoryName,
+	ProductName,
+	UnitPrice,
+	UnitsInStock 
+from Products 
+inner join Categories c on Products.CategoryID=c.ID
+            ";
+
+            using var connection = _dapperContext.CreateConnection();
+            var result = await connection.QueryAsync<ProductReportRow>(query);
+
+            return Ok(result);
         }
 
-        public record SupplierReportRow
+        [HttpGet("get-customer-profile")]
+        public async Task<IActionResult> GetCustomerProfile()
         {
-            public string CompanyName { get; set; } = string.Empty;
-            public string ProductName { get; set; } = string.Empty;
-            public DateTime SupplyDate { get; set; }
-            public int SupplyQuantity { get; set; }
-        }
-        public record TotalSupplyReportRow
-        {
-            public string CompanyName { get; set; } = string.Empty;
-            public int TotalSupply { get; set; }
-        }
+            var query = @"
+select TOP 10
+	p.ProductName,
+	(count(PS.ProductID)*PS.Quantity) as 'SellingCount',
+	AVG(C.Age) as 'AverageAge',
+	S.CompanyName,
+	CASE WHEN C.Gender = 0 THEN 'Female' ELSE 'Male' END as 'GenderMajority'
+from ProductSales PS
+inner join Products p on PS.ProductID=p.ID 
+inner join Supplier S on S.ID = P.SupplierID
+inner join Customers C on C.ID = PS.CustomerID
+group by ProductName,Quantity, S.CompanyName, C.Age, C.Gender
+order by SellingCount desc
+            ";
 
+            using var connection = _dapperContext.CreateConnection();
+            var result = await connection.QueryAsync<CustomerProfileRow>(query);
 
+            return Ok(result);
+        }
 
     }
 }
