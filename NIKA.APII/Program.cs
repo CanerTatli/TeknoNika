@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using NIKA.DAL;
+using NIKA.DAL.Data;
 using NIKA.DAL.Databases;
 
 var builder = WebApplication.CreateBuilder(args);

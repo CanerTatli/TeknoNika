@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NIKA.APII.Model;
 using NIKA.DAL;
+using NIKA.DAL.Data;
 using NIKA.DAL.Databases;
 using System.Linq;
 

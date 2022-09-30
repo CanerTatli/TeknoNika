@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NIKA.DAL
+namespace NIKA.DAL.Data
 {
     public partial class ProductSale
     {
@@ -10,7 +10,6 @@ namespace NIKA.DAL
         public int? SalesOrderId { get; set; }
         public int? Quantity { get; set; }
         public int? EmployeeId { get; set; }
-        public int? SupplierId { get; set; }
         public int? CustomerId { get; set; }
 
         public virtual Customer? Customer { get; set; }

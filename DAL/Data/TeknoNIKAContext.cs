@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace NIKA.DAL
+namespace NIKA.DAL.Data
 {
     public partial class TeknoNIKAContext : DbContext
     {
@@ -54,8 +54,6 @@ namespace NIKA.DAL
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Firstname).HasMaxLength(20);
-
-                entity.Property(e => e.Gender).HasMaxLength(10);
 
                 entity.Property(e => e.Lastname).HasMaxLength(20);
 
@@ -178,8 +176,6 @@ namespace NIKA.DAL
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
                 entity.Property(e => e.SalesOrderId).HasColumnName("SalesOrderID");
-
-                entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.ProductSales)

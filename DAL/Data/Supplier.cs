@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NIKA.DAL
+namespace NIKA.DAL.Data
 {
     public partial class Supplier
     {
